@@ -1,39 +1,48 @@
 import {useState} from 'react'
 
 function App() {
-    // runs every time we render the component, slowing down the performance
+    const [state, setState] = useState({count: 0, theme: "blue"})
+    const count = state.count
+    const theme = state.theme
+    // // or we can create 2 different hooks instead:
     // const [count, setCount] = useState(0)
-
-    // also if we pass a function it will run every time we render the component
-    // const initialCount() {
-    //   console.log('run function')
-    //   return 0
+    // const [theme, setTheme] = useState('blue')
+    // const decrementCount = () => {
+    //     if (count > 0) {
+    //         setCount(prevCount => prevCount - 1)
+    //     }
     // }
-    // const [count, setCount] = useState(initialCount)
-
-    // runs only the first time the component renders
-    const [count, setCount] = useState(() => {
-        console.log('run function')
-        return 0
-    })
 
     const decrementCount = () => {
         if (count > 0) {
-            setCount(count-1)
+            setState(prevState => {
+                return {...prevState, count: prevState.count - 1}
+            })
         }
-        // setCount(prevCount => prevCount - 1)
-        // setCount(prevCount => prevCount - 1)
     }
 
     const incrementCount = () => {
-        setCount(count + 1)
+        setState(prevState => {
+            return {...prevState, count: prevState.count + 1}
+        })
+    }
+
+    const changeTheme = () => {
+        setState(prevState => {
+            return prevState.theme === 'blue' ? {...prevState, theme: 'red'} : {...prevState, theme: 'blue'}
+        })
     }
 
     return (
         <>
-            <button onClick={decrementCount}>-</button>
-            <span>{count}</span>
-            <button onClick={incrementCount}>+</button>
+            <div>
+                <button onClick={decrementCount}>-</button>
+                <span>{count}</span>
+                <button onClick={incrementCount}>+</button>
+            </div>
+            <div>
+                <button onClick={changeTheme}>{theme}</button>
+            </div>
         </>
     );
 }
