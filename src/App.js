@@ -1,28 +1,37 @@
-import { useState } from "react";
+import { useReducer } from "react";
+
+const ACTIONS = {
+  INCREMENT: "increment",
+  DECREMENT: "decrement",
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case ACTIONS.INCREMENT:
+      return { count: state.count + 1 };
+    case ACTIONS.DECREMENT:
+      return { count: state.count - 1 };
+    default:
+      return state;
+  }
+}
 
 export default function App() {
-  const [state, setState] = useState({ count: 0, theme: "blue" });
-  const count = state.count;
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
 
   function decrement() {
-    if (count > 0) {
-      setState((prevState) => {
-        return { ...prevState, count: prevState.count - 1 };
-      });
-    }
+    dispatch({ type: ACTIONS.DECREMENT });
   }
 
   function increment() {
-    setState((prevState) => {
-      return { ...prevState, count: prevState.count + 1 };
-    });
+    dispatch({ type: ACTIONS.INCREMENT });
   }
 
   return (
     <>
       <div>
         <button onClick={decrement}>-</button>
-        <span>{count}</span>
+        <span>{state.count}</span>
         <button onClick={increment}>+</button>
       </div>
     </>
